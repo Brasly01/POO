@@ -1,3 +1,5 @@
+package logicadenegocios;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -9,7 +11,7 @@ import javax.imageio.ImageIO;
 
 public class CrearImagen {
   private String identificador;
-  private String identificadorPng;
+  private String nombreArchivo;
   private int[][] matriz;
   private String linea1;
   private String linea2;
@@ -17,30 +19,19 @@ public class CrearImagen {
   private String linea4;
   private String linea5;
     
-  public CrearImagen (String pIdentificador, int[][] pMatriz) {
-    agregarIdentificador(pIdentificador);
-    agregarIdentificadorPng (pIdentificador);
-    lineasMatriz(pMatriz);
+  public CrearImagen (CartonBingo pCarton, String pUbicacion) {
+    identificador = pCarton.getIdentificador();
+    nombreArchivo = pUbicacion + pCarton.getIdentificador() + ".png";
+    lineasMatriz(pCarton.getMatriz());
     crearPng ();
-    
-    
-  }
-  
-  public void agregarIdentificador(String pIdentificador) {
-    identificador=pIdentificador;
-  }
-  
-  public void agregarIdentificadorPng (String pIdentificador) {
-    pIdentificador += ".png";
-    identificadorPng=pIdentificador;
   }
   
   public String getIdentificador () {
     return identificador;
   }
     
-  public String getIdentificadorPng () {
-    return identificadorPng;
+  public String getNombreArchivo () {
+    return nombreArchivo;
   }
     
   public void lineasMatriz(int[][] pMatriz) {
@@ -192,23 +183,11 @@ public class CrearImagen {
     g2d.dispose();
 
     try {
-      File archivo = new File(getIdentificadorPng () );
+      File archivo = new File(nombreArchivo);
       ImageIO.write(imagen, "png", archivo);
       System.out.println("Imagen creada con éxito.");
       }  catch (IOException e) {
          System.err.println("Error al guardar la imagen: " + e.getMessage());
       }  
-  }
-  
-  public static void main(String[] args) {
-     int[][] matriz = {
-            {1, 2, 3, 4, 5},
-            {16, 17, 18, 19, 20},
-            {30, 35, 36, 37, 38},
-            {51, 52, 53, 54, 55},
-            {71, 72, 73, 74, 75}
-        };
-
-        CrearImagen crea1 = new CrearImagen("pto", matriz);
   }
 }
