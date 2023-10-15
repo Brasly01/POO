@@ -1,7 +1,13 @@
 package logicadenegocios;
 
-
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.FileReader;
 
 /**
  * Write a description of class Juego here.
@@ -14,7 +20,7 @@ public class Juego {
   private ArrayList<CartonBingo> cartones;
   private ArrayList<Jugador> jugadores;
   private String identificador;
-  
+  private static String ARCHIVO_JUGADORES= "C:\\Users\\Eyden\\Desktop\\Jugadores.csv";
   
   public Juego() {
     cartones = new ArrayList<CartonBingo>();
@@ -25,7 +31,7 @@ public class Juego {
   
   public void agregarJugador(String pNombre, String pCedula, String pEmail) {
     for (Jugador jugador: jugadores) {
-      if (pCedula == jugador.getCedula()) {
+      if (buscarJugador(pCedula) != null) {
         return;
       }
     }
@@ -78,26 +84,57 @@ public class Juego {
   
   public void generarCSV() {
     List<String[]> datos = new ArrayList<String[]>();
-    
-    for (Jugador jugador: jugadores) {
+
+    // Supongamos que Jugador tiene un método getDatos() que devuelve un array de Strings
+    for (Jugador jugador : jugadores) {
       datos.add(jugador.getDatos());
     }
-    
-    String archCSV = "C:\\Users\\Eyden\\Desktop\\Jugadores.csv";
-    //CSVWriter writer = new CSVWriter(new FileWriter(archCSV));
 
-    //writer.writeAll(paises);
+    try {
+      // Crear una instancia de FileWriter para abrir el archivo CSV en modo de escritura
+      FileWriter fileWriter = new FileWriter(ARCHIVO_JUGADORES);
 
-    //writer.close();
+      // Crear una instancia de CSVPrinter con el formato CSV deseado
+      CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT);
+
+      // Escribir los datos en el archivo CSV utilizando CSVPrinter
+      for (String[] fila : datos) {
+        csvPrinter.printRecord((Object[]) fila);
+      }
+
+      // Cerrar el archivo CSV
+      csvPrinter.close();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
   
   public Jugador buscarJugador(String pCedula) {
       
     for (Jugador jugador: jugadores) {
-      if (pCedula == jugador.getCedula()) {
+      if (pCedula.equals(jugador.getCedula())) {
+        
         return jugador;
       }
     }
     return null;
+  }
+  
+  public void cargarJugadores() {
+    try (FileReader lector = new FileReader(ARCHIVO_JUGADORES);
+         CSVParser csvParser = CSVParser.parse(lector, CSVFormat.DEFAULT)) {
+      for (CSVRecord csvRecord : csvParser) {
+        String nombre = csvRecord.get(0);
+        String cedula = csvRecord.get(1);
+        String email = csvRecord.get(2);
+        
+        
+        Jugador jugador = new Jugador(nombre, cedula, email);
+        jugadores.add(jugador);
+      }
+    } catch (IOException e){
+      e.printStackTrace();
+    }
   }
 }
