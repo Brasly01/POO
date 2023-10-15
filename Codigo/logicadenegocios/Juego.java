@@ -19,6 +19,7 @@ public class Juego {
     
   private ArrayList<CartonBingo> cartones;
   private ArrayList<Jugador> jugadores;
+  private ArrayList<Integer> numerosCantados;
   private String identificador;
   private static final String ARCHIVO_JUGADORES= "C:\\Users\\Eyden\\OneDrive - Estudiantes ITCR\\TEC II SEMESTRE\\P.O.O\\proyecto1\\Documentos\\Jugadores.csv";
   private static final String CARPETA_IMAGENES= "C:\\Users\\Eyden\\OneDrive - Estudiantes ITCR\\TEC II SEMESTRE\\P.O.O\\proyecto1\\Imagenes\\";
@@ -26,20 +27,21 @@ public class Juego {
   public Juego() {
     cartones = new ArrayList<CartonBingo>();
     jugadores = new ArrayList<Jugador>();
+    numerosCantados = new ArrayList<Integer>();
     identificador = generarIdentificador();
-    
   }
   
   public int cantarNumero() {
     Random random = new Random();
     
-    int numeroAleatorio = random.nextInt(76);
+    Integer numeroCantado = random.nextInt(76);
     
-    while (numeroAleatorio == 0) {
-      numeroAleatorio = cantarNumero();
+    while (numeroCantado == 0) {
+      numeroCantado = cantarNumero();
     }
     
-    return numeroAleatorio;
+    numerosCantados.add(numeroCantado);
+    return numeroCantado;
   }
   
   public void agregarJugador(String pNombre, String pCedula, String pEmail) {
