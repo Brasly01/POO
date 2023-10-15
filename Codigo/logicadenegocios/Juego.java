@@ -20,7 +20,8 @@ public class Juego {
   private ArrayList<CartonBingo> cartones;
   private ArrayList<Jugador> jugadores;
   private String identificador;
-  private static String ARCHIVO_JUGADORES= "C:\\Users\\Eyden\\Desktop\\Jugadores.csv";
+  private static final String ARCHIVO_JUGADORES= "C:\\Users\\Eyden\\OneDrive - Estudiantes ITCR\\TEC II SEMESTRE\\P.O.O\\proyecto1\\Documentos\\Jugadores.csv";
+  private static final String CARPETA_IMAGENES= "C:\\Users\\Eyden\\OneDrive - Estudiantes ITCR\\TEC II SEMESTRE\\P.O.O\\proyecto1\\Imagenes\\";
   
   public Juego() {
     cartones = new ArrayList<CartonBingo>();
@@ -48,16 +49,31 @@ public class Juego {
     }
   }
   
-  public void enviarCartones (int pCantidad, String pCedula) {
-    Jugador j = buscarJugador(pCedula);
+  public void asignarCartones(int pCantidad, String pCedula) {
+    Jugador jugadorActual = buscarJugador(pCedula);
+    ArrayList<String> ubicaciones = new ArrayList<String>();
+    
+    if (jugadorActual == null || 1 > pCantidad || pCantidad > 5) {
+      return;
+    }
     int contador = 0;
     
     for (CartonBingo carton: cartones) {
       if (carton.getJugadorAsig() == null && contador < pCantidad) {
         contador ++;
-        carton.asignarAJugador(j);
+        carton.asignarAJugador(jugadorActual);
+        new CrearImagen(carton, CARPETA_IMAGENES).crearPng();
+        ubicaciones.add(CARPETA_IMAGENES + carton.getIdentificador() + ".png");
       }
     }
+    
+    enviarCartones(jugadorActual, ubicaciones);
+  }
+  
+  public void enviarCartones(Jugador pJugador, ArrayList<String> pUbicaciones) {
+    String[] archivosAdjuntos = pUbicaciones.toArray(new String[0]);
+
+    new EnviarCorreo(pJugador.getEmail(), archivosAdjuntos);
   }
   
   public ArrayList<CartonBingo> getCartones() {
