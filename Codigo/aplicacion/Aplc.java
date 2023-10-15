@@ -10,17 +10,18 @@ import java.util.*;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Aplc {
+public class CopyOfAplc {
     
   public static void main(String args[]) {
-      
-      
     Juego jg = new Juego();
     String msg = "";    
-    jg.agregarJugador("Eyden Snc", "70329", "es@aa");
     jg.generarCartones(10);
     
-    jg.enviarCartones(2, "70329");
+    jg.cargarJugadores();
+    for (Jugador jugador: jg.getJugadores()) {
+      System.out.println(jugador.toString());
+    }
+    jg.asignarCartones(2, "70329");
     
     ArrayList<CartonBingo> cbs = jg.getCartones();
     
