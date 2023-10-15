@@ -1,3 +1,5 @@
+package logicadenegocios;
+
  
 import java.util.Properties;
 import javax.mail.internet.InternetAddress;
@@ -14,13 +16,24 @@ import javax.mail.internet.MimeMultipart;
 import java.io.File;
 
 public class EnviarCorreo {
+  
   private String usuario= "pruebatecpoo@gmail.com";
   private String clave = "dyol fedu pjgj khit";
   private String servidor = "smtp.gmail.com";
   private String puerto = "587"; 
   private Properties propiedades;
   
-  public EnviarCorreo(String destinatario, String tituloCorreo, String cuerpo, String[] archivosAdjuntos) {
+  public EnviarCorreo(String destinatario, String[] archivosAdjuntos) {
+      
+    String tituloCorreo = "BINGO";
+    String cuerpo;
+    
+    if (archivosAdjuntos.length > 1) {
+      cuerpo = "Se adjuntan sus cartones de juego";
+    } else {
+      cuerpo = "Se adjunta sus carton de juego";
+    }
+    
     CuentaCorreo ();
     Session sesion = abrirSesion();
     try {
@@ -32,21 +45,21 @@ public class EnviarCorreo {
       mensajeParte.setText(cuerpo);
       Multipart multipart = new MimeMultipart();
       multipart.addBodyPart(mensajeParte);
-    if (archivosAdjuntos != null) {
-      for (String archivoAdjunto : archivosAdjuntos) {
-        MimeBodyPart adjuntoParte = new MimeBodyPart();
-        File adjunto = new File(archivoAdjunto);
-        adjuntoParte.attachFile(adjunto);
-        multipart.addBodyPart(adjuntoParte);
-      }
-    } 
+      if (archivosAdjuntos != null) {
+        for (String archivoAdjunto : archivosAdjuntos) {
+          MimeBodyPart adjuntoParte = new MimeBodyPart();
+          File adjunto = new File(archivoAdjunto);
+          adjuntoParte.attachFile(adjunto);
+          multipart.addBodyPart(adjuntoParte);
+        }
+      } 
     
-    message.setContent(multipart);
-    Transport.send(message);
+      message.setContent(multipart);
+      Transport.send(message);
     } catch (MessagingException e) {
-    e.printStackTrace();
+      e.printStackTrace();
     } catch (Exception e) {
-    e.printStackTrace();
+      e.printStackTrace();
     }
   }
   
@@ -60,27 +73,11 @@ public class EnviarCorreo {
   
   private Session abrirSesion() {
     Session sesion = Session.getInstance(propiedades,
-      new javax.mail. Authenticator() {
-        protected PasswordAuthentication getPasswordAuthentication() { 
-          return new PasswordAuthentication (usuario, clave);
-        }
+    new javax.mail. Authenticator() {
+      protected PasswordAuthentication getPasswordAuthentication() { 
+        return new PasswordAuthentication (usuario, clave);
+      }
     });
     return sesion;
    }
-  
-  
-  
-  public static void main(String[] args) {
-     String destinatario= "braslymorales@gmail.com";
-     String tituloCorreo = "sirve?";
-     String[] archivosAdjuntos = {
-        "/Users/Usuario/Desktop/lab 6/Investigacion.pdf"
-    };
-     String cuerpo= "aveces";
-     
-
-        EnviarCorreo crea1 = new EnviarCorreo(destinatario, tituloCorreo, cuerpo, archivosAdjuntos);
-        
-  }
-  
 }
