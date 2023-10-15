@@ -54,7 +54,7 @@ public class Aplc {
       System.out.println(jugador.toString());
     }
     
-    
+    jg.generarCSV();
   }
   
   
