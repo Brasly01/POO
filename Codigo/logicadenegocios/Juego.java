@@ -30,6 +30,18 @@ public class Juego {
     
   }
   
+  public int cantarNumero() {
+    Random random = new Random();
+    
+    int numeroAleatorio = random.nextInt(76);
+    
+    while (numeroAleatorio == 0) {
+      numeroAleatorio = cantarNumero();
+    }
+    
+    return numeroAleatorio;
+  }
+  
   public void agregarJugador(String pNombre, String pCedula, String pEmail) {
     for (Jugador jugador: jugadores) {
       if (buscarJugador(pCedula) != null) {
