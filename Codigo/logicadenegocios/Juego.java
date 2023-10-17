@@ -56,10 +56,10 @@ public class Juego {
   public void generarCartones(int cantidad) {
     if (0 < cantidad && cantidad < 501) {
       for (int i = 0; i < cantidad; i++) {
-        cartones.add(new CartonBingo(identificador));
+        CartonBingo nuevoCarton = new CartonBingo(identificador);
+        cartones.add(nuevoCarton);
+        new CrearImagen(nuevoCarton, CARPETA_IMAGENES).crearPng();
       }
-    } else {
-      return;
     }
   }
   
@@ -76,7 +76,6 @@ public class Juego {
       if (carton.getJugadorAsig() == null && contador < pCantidad) {
         contador ++;
         carton.asignarAJugador(jugadorActual);
-        new CrearImagen(carton, CARPETA_IMAGENES).crearPng();
         ubicaciones.add(CARPETA_IMAGENES + carton.getIdentificador() + ".png");
       }
     }
@@ -87,7 +86,7 @@ public class Juego {
   public void enviarCartones(Jugador pJugador, ArrayList<String> pUbicaciones) {
     String[] archivosAdjuntos = pUbicaciones.toArray(new String[0]);
 
-    new EnviarCorreo(pJugador.getEmail(), archivosAdjuntos);
+    EnviarCorreo enviarCorreo = new EnviarCorreo(pJugador.getEmail(), archivosAdjuntos);
   }
   
   public ArrayList<CartonBingo> getCartones() {
@@ -96,6 +95,15 @@ public class Juego {
   
   public ArrayList<Jugador> getJugadores() {
     return jugadores;
+  }
+  
+  public boolean hayCartonAsignado() {
+    for (CartonBingo carton : cartones) {
+      if (carton.getJugadorAsig() != null) {
+        return true;
+      }
+    }
+    return false;
   }
   
   public String generarIdentificador() {
@@ -151,9 +159,21 @@ public class Juego {
     return null;
   }
   
+  public CartonBingo buscarCarton(String pIdentificador) {
+      
+    for (CartonBingo carton: cartones) {
+      if (pIdentificador.equals(carton.getIdentificador())) {
+        
+        return carton;
+      }
+    }
+    return null;
+  }
+  
   public void cargarJugadores() {
-    try (FileReader lector = new FileReader(ARCHIVO_JUGADORES);
-         CSVParser csvParser = CSVParser.parse(lector, CSVFormat.DEFAULT)) {
+    try {
+        FileReader lector = new FileReader(ARCHIVO_JUGADORES);
+        CSVParser csvParser = CSVParser.parse(lector, CSVFormat.DEFAULT);
       for (CSVRecord csvRecord : csvParser) {
         String nombre = csvRecord.get(0);
         String cedula = csvRecord.get(1);
@@ -164,7 +184,10 @@ public class Juego {
         jugadores.add(jugador);
       }
     } catch (IOException e){
-      e.printStackTrace();
     }
+  }
+  
+  public static String getCarpetaImagenes() {
+    return CARPETA_IMAGENES;
   }
 }
