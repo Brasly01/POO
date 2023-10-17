@@ -8,11 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-
 public class CrearImagen {
   private String identificador;
   private String nombreArchivo;
-  private int[][] matriz;
   private String linea1;
   private String linea2;
   private String linea3;
@@ -24,6 +22,15 @@ public class CrearImagen {
     nombreArchivo = pUbicacion + pCarton.getIdentificador() + ".png";
     lineasMatriz(pCarton.getMatriz());
     crearPng ();
+  }
+  
+  public void agregarIdentificador(String pIdentificador) {
+    identificador=pIdentificador;
+  }
+  
+  public void agregarIdentificadorPng (String pIdentificador) {
+    pIdentificador += ".png";
+    nombreArchivo=pIdentificador;
   }
   
   public String getIdentificador () {
@@ -152,34 +159,55 @@ public class CrearImagen {
     g2d.setColor(Color.WHITE);
     g2d.fillRect(0, 0, ancho, alto);
     // Establece el color y la fuente para el texto
-    g2d.setColor(Color.BLACK);
+    g2d.setColor(Color.BLUE);
     Font fuente = new Font("Arial", Font.BOLD, 55);
     g2d.setFont(fuente);
     // Texto que deseas escribir en la imagen
     String texto = "B     I     N     G     O";
     // Coordenadas donde se escribirá el texto
-    int x = 50;
-    int y = 100;
     // Dibuja el texto en la imagen
-    g2d.drawString(texto, x, y);
+    g2d.drawString("B", 75, 100);
+    g2d.drawString("I", 200, 100);
+    g2d.drawString("N", 275, 100);
+    g2d.drawString("G", 375, 100);
+    g2d.drawString("O", 475 , 100);
     
     g2d.setColor(Color.BLACK);
-    Font fuente1 = new Font("Arial", Font.BOLD, 55);
+    Font fuente1 = new Font("Arial", Font.BOLD, 50);
     g2d.setFont(fuente1);
  
     // Dibuja el texto en la imagen
-    g2d.drawString(getLinea1 (), 15, 175);
+    g2d.drawString(getLinea1 (), 35, 175);
     
-    g2d.drawString(getLinea2 (), 15, 250);
+    g2d.drawString(getLinea2 (), 35, 250);
     
-    g2d.drawString(getLinea3 (), 15, 325);
+    g2d.drawString(getLinea3 (), 35, 325);
     
-    g2d.drawString(getLinea4 (), 15, 400);
+    g2d.drawString(getLinea4 (), 35, 400);
     
-    g2d.drawString(getLinea5 (), 15, 475);
+    g2d.drawString(getLinea5 (), 35, 475);
+    
+    g2d.setColor(Color.RED);
     
     g2d.drawString(getIdentificador (), 250, 550);
- 
+    
+    g2d.setColor(Color.BLACK);
+    g2d.drawLine(65, 50, 65, 500);
+    g2d.drawLine(160, 50, 160, 500);
+    g2d.drawLine(255, 50, 255, 500);
+    g2d.drawLine(355, 50, 355, 500);
+    g2d.drawLine(455, 50, 455, 500);
+    g2d.drawLine(550, 50, 550, 500);
+    
+
+    g2d.drawLine(65,50, 550, 50);
+    g2d.drawLine(65,115, 550, 115);
+    g2d.drawLine(65,190, 550, 190);
+    g2d.drawLine(65,270, 550, 270);
+    g2d.drawLine(65,345, 550, 345);
+    g2d.drawLine(65,415, 550, 415);
+    g2d.drawLine(65,500, 550, 500);
+    
     g2d.dispose();
 
     try {
@@ -190,4 +218,5 @@ public class CrearImagen {
          System.err.println("Error al guardar la imagen: " + e.getMessage());
       }  
   }
+
 }
