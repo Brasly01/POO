@@ -21,6 +21,8 @@ public class Juego {
   private ArrayList<Jugador> jugadores;
   private ArrayList<Integer> numerosCantados;
   private String identificador;
+  private String modoJuego;
+  private String premio;
   private static final String ARCHIVO_JUGADORES= "C:\\Users\\Eyden\\OneDrive - Estudiantes ITCR\\TEC II SEMESTRE\\P.O.O\\proyecto1\\Documentos\\Jugadores.csv";
   private static final String CARPETA_IMAGENES= "C:\\Users\\Eyden\\OneDrive - Estudiantes ITCR\\TEC II SEMESTRE\\P.O.O\\proyecto1\\Imagenes\\";
   
@@ -34,14 +36,26 @@ public class Juego {
   public int cantarNumero() {
     Random random = new Random();
     
-    Integer numeroCantado = random.nextInt(76);
-    
-    while (numeroCantado == 0) {
-      numeroCantado = cantarNumero();
-    }
-    
+    if (numerosCantados.size() < 75){
+      int numeroCantado;
+    do {
+        numeroCantado = random.nextInt(76);
+    } while (numeroCantado == 0 || esNumeroCantado(numeroCantado));
+
     numerosCantados.add(numeroCantado);
     return numeroCantado;
+    } else {
+      return -1;
+    }  
+  }
+  
+  public boolean esNumeroCantado(int pNum) {
+    for (int numeroCantado : numerosCantados) {
+      if (numeroCantado == pNum) {
+        return true;
+      }
+    }
+    return false;
   }
   
   public void agregarJugador(String pNombre, String pCedula, String pEmail) {
@@ -61,6 +75,14 @@ public class Juego {
         new CrearImagen(nuevoCarton, CARPETA_IMAGENES).crearPng();
       }
     }
+  }
+  
+  public void setPremio(String pPremio) {
+    premio = pPremio;
+  }
+  
+  public void setModoJuego(String pModo) {
+    modoJuego = pModo; 
   }
   
   public void asignarCartones(int pCantidad, String pCedula) {
@@ -189,5 +211,13 @@ public class Juego {
   
   public static String getCarpetaImagenes() {
     return CARPETA_IMAGENES;
+  }
+
+  public String getModoJuego() {
+    return modoJuego;
+  }
+  
+  public ArrayList<Integer> getNumerosCantados() {
+    return numerosCantados;
   }
 }
